@@ -15,6 +15,9 @@ const MainPage: FC = () => {
 
   const handleAddTodosList = () => {
     const name = listNameInputRef.current?.value as string
+
+    if (name == '') return
+
     handleAddList(name)
     handleCloseModal()
   }
@@ -23,7 +26,7 @@ const MainPage: FC = () => {
     <MainPageWrapper>
       <Toolbar>
         <div className='logo'>
-          <img src={logoImg} alt='logo' />
+          {/* <img src={logoImg} alt='logo' /> */}
           <span>SWEET TODO</span>
         </div>
         <TodoLists>
@@ -37,9 +40,11 @@ const MainPage: FC = () => {
       <div className='todos'></div>
       <Modal isOpen={isOpen}>
         <ListAddModal>
-          <input type='text' ref={listNameInputRef} />
-          <button onClick={() => handleAddTodosList()}>Add List</button>
-          <button onClick={() => handleCloseModal()}>Close</button>
+          <input type='text' placeholder='List name' ref={listNameInputRef} />
+          <div className='buttons'>
+            <button onClick={() => handleAddTodosList()}>Add List</button>
+            <button onClick={() => handleCloseModal()}>Cancel</button>
+          </div>
         </ListAddModal>
       </Modal>
     </MainPageWrapper>

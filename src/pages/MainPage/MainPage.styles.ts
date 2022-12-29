@@ -118,9 +118,9 @@ export const TodoLists = styled.ul`
     justify-content: center;
     align-items: center;
 
-    font-size: 20px;
+    font-size: 18px;
     font-family: 'Nunito', sans-serif;
-    font-weight: 400;
+    font-weight: 600;
 
     cursor: pointer;
 
@@ -134,7 +134,7 @@ export const TodoLists = styled.ul`
 `
 
 export const ListAddModal = styled.div`
-  width: 50vw;
+  width: 40vw;
   height: 200px;
 
   background-color: #fff;
@@ -147,6 +147,59 @@ export const ListAddModal = styled.div`
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
+
+  position: relative;
+
+  input {
+    width: 80%;
+    height: 60px;
+
+    background-color: #eee;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 22px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: bold;
+
+    text-align: center;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .buttons {
+    width: 80%;
+
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    button {
+      width: 22%;
+      height: 50px;
+
+      background-color: #fee085;
+
+      border: none;
+      border-radius: 10px;
+
+      font-size: 20px;
+      font-weight: 400;
+      color: #000;
+
+      cursor: pointer;
+
+      transition: all 0.2s;
+
+      &:hover {
+        background-color: #000;
+        color: #eee;
+      }
+    }
+  }
 `
