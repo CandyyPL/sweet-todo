@@ -1,9 +1,4 @@
-import {
-  TTodoListsList,
-  todoListsListInitial,
-  ITodoList,
-  ITodo,
-} from '@/types/Todo.types'
+import { TTodoListsList, todoListsListInitial, ITodoList, ITodo } from '@/types/Todo.types'
 import {
   EChangeActions,
   ITodosContext,
@@ -19,6 +14,15 @@ const TodosProvider: FC<ITodosProviderProps> = ({ children }) => {
   const [currentList, setCurrentList] = useState<ITodoList | null>(null)
 
   useEffect(() => {
+    const storageTodoLists = localStorage.getItem('todoLists')
+
+    if (storageTodoLists != undefined || storageTodoLists != null)
+      setTodoLists(JSON.parse(storageTodoLists))
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('todoLists', JSON.stringify(todoLists))
+
     if (todoLists.length == 0) {
       setCurrentList(null)
       return
