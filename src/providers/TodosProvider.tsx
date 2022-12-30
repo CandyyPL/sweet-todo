@@ -1,23 +1,33 @@
-import { TTodoListsList, todoListsListInitial, ITodoList, ITodo } from '@/types/Todo'
+import {
+  TTodoListsList,
+  todoListsListInitial,
+  ITodoList,
+  ITodo,
+  todoListInitial,
+} from '@/types/Todo.types'
 import {
   EChangeActions,
   ITodosContext,
   ITodosProviderProps,
   todosContextInitial,
-} from '@/types/TodosProvider'
+} from '@/types/TodosProvider.types'
 import { FC, createContext, useState, useEffect } from 'react'
 
 export const TodosContext = createContext<ITodosContext>(todosContextInitial)
 
 const TodosProvider: FC<ITodosProviderProps> = ({ children }) => {
   const [todoLists, setTodoLists] = useState<TTodoListsList>(todoListsListInitial)
-  const [currentListIdx, setCurrentListIdx] = useState<number | null>(null)
+  const [currentList, setCurrentList] = useState<ITodoList | null>(null)
 
   useEffect(() => {
-    const currList = todoLists.find(list => list.id === currentListIdx)
+    if (todoLists.length == 0) {
+      setCurrentList(null)
+      return
+    }
 
-    if (currList == undefined) setCurrentListIdx(0)
-    if (todoLists.length == 1) setCurrentListIdx(todoLists[0].id)
+    const currList = todoLists[todoLists.length - 1] as ITodoList
+
+    setCurrentList(currList)
   }, [todoLists])
 
   const handleAddList = (name: string) => {
@@ -33,6 +43,12 @@ const TodosProvider: FC<ITodosProviderProps> = ({ children }) => {
 
   const handleEditListName = (listId: number, newName: string) => {
     handleMakeChanges(listId, EChangeActions.LIST_EDIT_NAME, null, newName)
+  }
+
+  const handleEditTodoItem = (originList: ITodoList, todoItem: ITodo) => {
+    const cleared = originList.todos.filter(todo => todo.id !== todoItem.id)
+    cleared.push(todoItem)
+    return cleared
   }
 
   const handleMakeChanges = (
@@ -53,6 +69,7 @@ const TodosProvider: FC<ITodosProviderProps> = ({ children }) => {
     const targetTodo = targetList.todos.find(todo => todo.id === todoId) as ITodo
 
     let newTargetList: ITodoList = { ...targetList }
+    let newTodos: ITodo[] = [...targetList.todos]
 
     switch (mode) {
       case EChangeActions.TODO_ADD:
@@ -67,9 +84,11 @@ const TodosProvider: FC<ITodosProviderProps> = ({ children }) => {
       case EChangeActions.TODO_EDIT_TITLE:
         Object.assign(targetTodo, { ...targetTodo, title: payload })
 
+        newTodos = handleEditTodoItem(targetList, targetTodo)
+
         newTargetList = {
           ...targetList,
-          todos: [...targetList.todos, targetTodo],
+          todos: newTodos,
         }
         break
       case EChangeActions.LIST_EDIT_NAME:
@@ -78,22 +97,24 @@ const TodosProvider: FC<ITodosProviderProps> = ({ children }) => {
       case EChangeActions.TODO_FINISH:
         Object.assign(targetTodo, { ...targetTodo, done: true })
 
+        newTodos = handleEditTodoItem(targetList, targetTodo)
+
         newTargetList = {
           ...targetList,
-          todos: [...targetList.todos, targetTodo],
+          todos: newTodos,
         }
         break
     }
 
-    const newTodoLists = [...todoLists, newTargetList]
+    const newTodoLists = todoLists.filter(list => list.id !== listId)
+    newTodoLists.push(newTargetList)
     setTodoLists(newTodoLists)
   }
 
-  const handleAddTodo = (listId: number, title: string, description: string, color: string) => {
+  const handleAddTodo = (listId: number, title: string, color: string) => {
     const newTodo: ITodo = {
       id: Math.floor(Math.random() * 10000) + 1,
       title,
-      description,
       color,
       done: false,
     }
@@ -122,8 +143,8 @@ const TodosProvider: FC<ITodosProviderProps> = ({ children }) => {
     handleDeleteTodo,
     handleEditTodoTitle,
     handleFinishTodo,
-    currentListIdx,
-    setCurrentListIdx,
+    currentList,
+    setCurrentList,
   }
 
   return <TodosContext.Provider value={provide}>{children}</TodosContext.Provider>

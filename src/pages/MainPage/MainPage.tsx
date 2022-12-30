@@ -1,20 +1,17 @@
 import { ListAddModal, MainPageWrapper, TodoLists, Toolbar } from '@/pages/MainPage/MainPage.styles'
 import { FC, useContext, useEffect, useRef, useState } from 'react'
 import logoImg from '@/assets/logo.png'
-import { ITodosContext } from '@/types/TodosProvider'
+import { ITodosContext } from '@/types/TodosProvider.types'
 import { TodosContext } from '@/providers/TodosProvider'
 import useModal from '@/hooks/useModal'
 import Modal from '@/components/Modal/Modal'
 import jakeImg from '@/assets/jake.png'
-import { ITodo, ITodoList, todoListInitial } from '@/types/Todo'
+import { ITodo, ITodoList, todoListInitial } from '@/types/Todo.types'
 import TodoSection from '@/components/TodoSection/TodoSection'
 import TodoListEntry from '@/components/TodoListEntry/TodoListEntry'
 
 const MainPage: FC = () => {
-  const { todoLists, handleAddList, currentListIdx, setCurrentListIdx } =
-    useContext<ITodosContext>(TodosContext)
-
-  const [currentList, setCurrentList] = useState<ITodoList>(todoListInitial)
+  const { todoLists, handleAddList, setCurrentList } = useContext<ITodosContext>(TodosContext)
 
   const { isOpen, handleOpenModal, handleCloseModal } = useModal()
 
@@ -34,19 +31,6 @@ const MainPage: FC = () => {
     return todoList
   }
 
-  useEffect(() => {
-    if (currentListIdx == null) return
-
-    const todoList = getCurrentList(currentListIdx)
-
-    if (todoList == undefined) {
-      setCurrentList(todoListInitial)
-      return
-    }
-
-    setCurrentList(todoList)
-  }, [currentListIdx])
-
   return (
     <MainPageWrapper>
       <Toolbar>
@@ -58,7 +42,7 @@ const MainPage: FC = () => {
           <img src={jakeImg} alt='jake' />
           {todoLists.length > 0
             ? todoLists.map(list => (
-                <TodoListEntry setList={setCurrentListIdx} list={list} key={list.id} />
+                <TodoListEntry setList={setCurrentList} list={list} key={list.id} />
               ))
             : null}
         </TodoLists>
@@ -67,11 +51,11 @@ const MainPage: FC = () => {
         </button>
       </Toolbar>
       <div className='todos'>
-        <TodoSection list={currentList} />
+        <TodoSection />
       </div>
       <Modal isOpen={isOpen}>
         <ListAddModal>
-          <input type='text' placeholder='List name' ref={listNameInputRef} />
+          <input type='text' placeholder='List name' maxLength={25} ref={listNameInputRef} />
           <div className='buttons'>
             <button onClick={() => handleAddTodosList()}>Add List</button>
             <button onClick={() => handleCloseModal()}>Cancel</button>

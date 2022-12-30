@@ -1,14 +1,20 @@
 import { TodoListEntryWrapper } from '@/components/TodoListEntry/TodoListEntry.styles'
-import { ITodoList } from '@/types/Todo'
-import { FC } from 'react'
+import { ITodoList } from '@/types/Todo.types'
+import { FC, useRef } from 'react'
 
 interface ITodoListEntryProps {
-  setList: (id: number) => void
+  setList: (list: ITodoList) => void
   list: ITodoList
 }
 
 const TodoListEntry: FC<ITodoListEntryProps> = ({ setList, list }) => {
-  return <TodoListEntryWrapper onClick={() => setList(list.id)}>{list.name}</TodoListEntryWrapper>
+  const entryRef = useRef<HTMLLIElement>(null)
+
+  return (
+    <TodoListEntryWrapper onClick={() => setList(list)} ref={entryRef}>
+      {list.name}
+    </TodoListEntryWrapper>
+  )
 }
 
 export default TodoListEntry

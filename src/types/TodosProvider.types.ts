@@ -1,4 +1,4 @@
-import { TTodoListsList } from '@/types/Todo'
+import { ITodoList, TTodoListsList } from '@/types/Todo.types'
 
 export interface ITodosProviderProps {
   children: JSX.Element
@@ -9,12 +9,12 @@ export interface ITodosContext {
   handleAddList: (name: string) => void
   handleDeleteList: (id: number) => void
   handleEditListName: (listId: number, newName: string) => void
-  handleAddTodo: (listId: number, title: string, description: string, color: string) => void
+  handleAddTodo: (listId: number, title: string, color: string) => void
   handleDeleteTodo: (listId: number, todoId: number) => void
   handleEditTodoTitle: (listId: number, todoId: number, newTitle: string) => void
   handleFinishTodo: (listId: number, todoId: number) => void
-  currentListIdx: number | null
-  setCurrentListIdx: (id: number) => void
+  currentList: ITodoList | null
+  setCurrentList: (list: ITodoList) => void
 }
 
 export const todosContextInitial = {
@@ -22,12 +22,12 @@ export const todosContextInitial = {
   handleAddList: (name: string) => {},
   handleDeleteList: (id: number) => {},
   handleEditListName: (listId: number, newName: string) => {},
-  handleAddTodo: (listId: number, title: string, description: string, color: string) => {},
+  handleAddTodo: (listId: number, title: string, color: string) => {},
   handleDeleteTodo: (listId: number, todoId: number) => {},
   handleEditTodoTitle: (listId: number, todoId: number, newTitle: string) => {},
   handleFinishTodo: (listId: number, todoId: number) => {},
-  currentListIdx: null,
-  setCurrentListIdx: (id: number) => {},
+  currentList: { id: 0, name: '', todos: [] },
+  setCurrentList: (list: ITodoList) => {},
 }
 
 export enum EChangeActions {
