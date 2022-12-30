@@ -3,7 +3,6 @@ import {
   todoListsListInitial,
   ITodoList,
   ITodo,
-  todoListInitial,
 } from '@/types/Todo.types'
 import {
   EChangeActions,
