@@ -5,12 +5,20 @@ import {
   ITodosProviderProps,
   todosContextInitial,
 } from '@/types/TodosProvider'
-import { FC, createContext, useState } from 'react'
+import { FC, createContext, useState, useEffect } from 'react'
 
 export const TodosContext = createContext<ITodosContext>(todosContextInitial)
 
 const TodosProvider: FC<ITodosProviderProps> = ({ children }) => {
   const [todoLists, setTodoLists] = useState<TTodoListsList>(todoListsListInitial)
+  const [currentListIdx, setCurrentListIdx] = useState<number | null>(null)
+
+  useEffect(() => {
+    const currList = todoLists.find(list => list.id === currentListIdx)
+
+    if (currList == undefined) setCurrentListIdx(0)
+    if (todoLists.length == 1) setCurrentListIdx(todoLists[0].id)
+  }, [todoLists])
 
   const handleAddList = (name: string) => {
     const newTodosList: ITodoList = { id: Math.floor(Math.random() * 10000), name, todos: [] }
@@ -83,7 +91,7 @@ const TodosProvider: FC<ITodosProviderProps> = ({ children }) => {
 
   const handleAddTodo = (listId: number, title: string, description: string, color: string) => {
     const newTodo: ITodo = {
-      id: Math.floor(Math.random() * 10000),
+      id: Math.floor(Math.random() * 10000) + 1,
       title,
       description,
       color,
@@ -114,6 +122,8 @@ const TodosProvider: FC<ITodosProviderProps> = ({ children }) => {
     handleDeleteTodo,
     handleEditTodoTitle,
     handleFinishTodo,
+    currentListIdx,
+    setCurrentListIdx,
   }
 
   return <TodosContext.Provider value={provide}>{children}</TodosContext.Provider>

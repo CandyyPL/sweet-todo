@@ -10,7 +10,7 @@ ModalWrapper.setAppElement('#root')
 
 const Modal: FC<IModalProps> = ({ isOpen, children }) => {
   return (
-    <ModalWrapper isOpen={isOpen} style={{ overlay: { backgroundColor: '#444444dd' } }}>
+    <ModalWrapper isOpen={isOpen} style={{ overlay: { backgroundColor: '#444444dd', zIndex: 10 } }}>
       {children}
     </ModalWrapper>
   )

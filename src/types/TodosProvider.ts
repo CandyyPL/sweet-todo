@@ -13,6 +13,8 @@ export interface ITodosContext {
   handleDeleteTodo: (listId: number, todoId: number) => void
   handleEditTodoTitle: (listId: number, todoId: number, newTitle: string) => void
   handleFinishTodo: (listId: number, todoId: number) => void
+  currentListIdx: number | null
+  setCurrentListIdx: (id: number) => void
 }
 
 export const todosContextInitial = {
@@ -24,6 +26,8 @@ export const todosContextInitial = {
   handleDeleteTodo: (listId: number, todoId: number) => {},
   handleEditTodoTitle: (listId: number, todoId: number, newTitle: string) => {},
   handleFinishTodo: (listId: number, todoId: number) => {},
+  currentListIdx: null,
+  setCurrentListIdx: (id: number) => {},
 }
 
 export enum EChangeActions {

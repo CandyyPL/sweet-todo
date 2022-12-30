@@ -1,7 +1,6 @@
 export interface ITodo {
   id: number
   title: string
-  description: string
   color: string
   done: boolean
 }
@@ -17,7 +16,6 @@ export type TTodoListsList = ITodoList[]
 export const todoInitial: ITodo = {
   id: 0,
   title: '',
-  description: '',
   color: '',
   done: false,
 }
